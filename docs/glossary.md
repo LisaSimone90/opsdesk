@@ -1,0 +1,11 @@
+# Engineering Glossary
+- File: A single unit of saved data or code.
+- Folder: A directory that holds files and other folders.
+- Path: The location string that tells the operating system where a file is located.
+- Terminal: The text-based interface used to interact with the computer.
+- Command: An instruction given to a program or shell to execute an action.
+- Program: A saved collection of instructions designed to perform a task.
+- Process: An active, running instance of a program in memory.
+- Editor: A tool (such as VS Code) used to view and write source code.
+- Git: A local distributed version control system that tracks file history via snapshots.
+- Commit: A permanently recorded snapshot of staged changes in a repository.
