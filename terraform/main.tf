@@ -9,26 +9,30 @@ terraform {
 }
 
 provider "google" {
-  project = "alpine-bond-501500-f8"
-  region  = "us-central1"
+  project = var.project_id
+  region  = var.region
 }
 
+# Artifact Registry Repository
+resource "google_artifact_registry_repository" "opsdesk_repo" {
+  repository_id = "opsdesk-repo"
+  location      = var.region
+  format        = "DOCKER"
+  description   = "Docker repository for OpsDesk container images"
+}
+
+# Cloud Run v2 Service
 resource "google_cloud_run_v2_service" "opsdesk" {
   name     = "opsdesk-service"
-  location = "us-central1"
+  location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
     containers {
-      image = "us-central1-docker.pkg.dev/alpine-bond-501500-f8/opsdesk-repo/opsdesk-api:v1"
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/opsdesk-repo/opsdesk-api:${var.image_tag}"
       ports {
         container_port = 8000
       }
     }
   }
-}
-
-output "service_uri" {
-  value       = google_cloud_run_v2_service.opsdesk.uri
-  description = "The public URL of the Cloud Run service"
 }
