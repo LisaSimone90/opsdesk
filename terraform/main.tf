@@ -6,6 +6,11 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "gcs" {
+    bucket = "alpine-bond-501500-f8-tfstate"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {
