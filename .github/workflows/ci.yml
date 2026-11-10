@@ -73,6 +73,9 @@ jobs:
           service: opsdesk-api
           region: us-central1
           image: us-central1-docker.pkg.dev/alpine-bond-501500-f8/opsdesk-repo/opsdesk-api:${{ github.sha }}
+          flags: "--allow-unauthenticated"
 
-      - name: Display Service URL
-        run: echo "Deployed service URL is ${{ steps.deploy.outputs.url }}"
+      - name: Run Live Smoke Test on Deployed Endpoint
+        run: |
+          echo "Verifying live endpoint at ${{ steps.deploy.outputs.url }}/health"
+          curl --fail --retry 5 --retry-delay 3 -sS "${{ steps.deploy.outputs.url }}/health"

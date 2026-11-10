@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="OpsDesk Local API")
+app = FastAPI(title="OpsDesk API")
 
-@app.get("/healthz")
+@app.get("/")
+def read_root():
+    return {"service": "opsdesk-api", "status": "running"}
+
+@app.get("/health")
 def health_check():
-    return {"status": "ok", "service": "opsdesk"}
+    return {"status": "healthy"}
 
 @app.get("/readyz")
 def readiness_check():
