@@ -7,8 +7,12 @@ def read_root():
     return {"service": "opsdesk-api", "status": "running"}
 
 @app.get("/health")
-def health_check():
+def health():
     return {"status": "healthy"}
+
+@app.get("/healthz")
+def health_check():
+    return {"status": "ok", "service": "opsdesk"}
 
 @app.get("/readyz")
 def readiness_check():
