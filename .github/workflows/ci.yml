@@ -31,7 +31,7 @@ jobs:
           pytest -v
 
   build-and-push:
-    name: Build & Push Container to Artifact Registry
+    name: Build, Push & Deploy to Cloud Run
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -65,3 +65,14 @@ jobs:
           docker build -t "$IMAGE_URI" -t "us-central1-docker.pkg.dev/alpine-bond-501500-f8/opsdesk-repo/opsdesk-api:latest" .
           docker push "$IMAGE_URI"
           docker push "us-central1-docker.pkg.dev/alpine-bond-501500-f8/opsdesk-repo/opsdesk-api:latest"
+
+      - name: Deploy Revision to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: opsdesk-api
+          region: us-central1
+          image: us-central1-docker.pkg.dev/alpine-bond-501500-f8/opsdesk-repo/opsdesk-api:${{ github.sha }}
+
+      - name: Display Service URL
+        run: echo "Deployed service URL is ${{ steps.deploy.outputs.url }}"
